@@ -1,0 +1,13 @@
+services:
+  - docker
+
+notifications:
+  email:
+    - team@appwrite.io
+
+before_script: 
+  - docker --version
+
+script:
+  - docker build -t appwrite/benchmarks .
+  - docker run appwrite/benchmarks 
