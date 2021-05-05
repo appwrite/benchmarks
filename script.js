@@ -120,7 +120,7 @@ export default ({ config, random, collection }) => {
                 "Content-Type": "application/json",
             },
         };
-        for (var id = 1; id <= 100; id++) {
+        for (var id = 1; id <= 50; id++) {
             const created = http.post(
                 `${APPWRITE_ENDPOINT}/database/collections/${collection["$id"]}/documents`,
                 JSON.stringify({
