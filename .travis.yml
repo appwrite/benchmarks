@@ -12,4 +12,3 @@ before_script:
 
 script:
   - docker build -t appwrite/benchmarks .
-  - docker run appwrite/benchmarks 
