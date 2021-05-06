@@ -1,4 +1,8 @@
 #!/bin/sh
 echo "Starting"
 
-k6 run script.js
+timestamp=$(date +%s)
+
+mkdir ./results/$timestamp/
+
+k6 run --out json=./results/$timestamp/data.json --out csv=./results/$timestamp/data.csv --summary-export=./results/$timestamp/summary.json script.js

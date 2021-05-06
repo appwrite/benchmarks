@@ -116,7 +116,7 @@ export default ({ config, random, collection }) => {
         const config = {
             headers: {
                 "X-Appwrite-Project": APPWRITE_PROJECT,
-                "accept": "application/json",
+                accept: "application/json",
                 "Content-Type": "application/json",
             },
         };
@@ -138,24 +138,24 @@ export default ({ config, random, collection }) => {
             check(created, {
                 "document created": (r) => r.status === 201,
             });
-        };
+        }
         const url = `${APPWRITE_ENDPOINT}/database/collections/${collection["$id"]}/documents?project=${APPWRITE_PROJECT}`;
         const responses = http.batch([
-            ['GET', url],
-            ['GET', url + "&filters%5B%5D=active%3D1"],
-            ['GET', url + "&filters%5B%5D=active%3D0"]
+            ["GET", url],
+            ["GET", url + "&filters%5B%5D=active%3D1"],
+            ["GET", url + "&filters%5B%5D=active%3D0"],
         ]);
         check(responses[0], {
-            'list documents status was 200': (res) => res.status === 200,
-            'got documents': (res) => res.json().sum > 0
+            "list documents status was 200": (res) => res.status === 200,
+            "got documents": (res) => res.json().sum > 0,
         });
         check(responses[1], {
-            'list documents status was 200': (res) => res.status === 200,
-            'got documents': (res) => res.json().sum > 0
+            "list documents status was 200": (res) => res.status === 200,
+            "got documents": (res) => res.json().sum > 0,
         });
         check(responses[2], {
-            'list documents status was 200': (res) => res.status === 200,
-            'got documents': (res) => res.json().sum > 0
+            "list documents status was 200": (res) => res.status === 200,
+            "got documents": (res) => res.json().sum > 0,
         });
     });
     sleep(1);
