@@ -8,6 +8,12 @@ docker build -t benchmarks .
 ```
 ## Run
 
+### HTTP
 ```sh
-docker run -it --env-file .env -v `pwd`/results:/results  benchmarks
+docker run -it --env-file .env -v `pwd`/results:/results -e task=http benchmarks
+```
+
+### Database
+```sh
+docker run -it --env-file .env -v `pwd`/results:/results -e task=database benchmarks
 ```
