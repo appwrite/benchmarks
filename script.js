@@ -143,7 +143,7 @@ export default ({ config, random, collection }) => {
         const responses = http.batch([
             ["GET", url],
             ["GET", url + "&filters%5B%5D=active%3D1"],
-            ["GET", url + "&filters%5B%5D=active%3D0"],
+            ["GET", url + "&filters%5B%5D=active!%3D1"],
         ]);
         check(responses[0], {
             "list documents status was 200": (res) => res.status === 200,
