@@ -37,40 +37,15 @@ export const setup = () => {
             "X-Appwrite-Project": APPWRITE_PROJECT,
         },
     };
-    const payload = {
-        name: `benchmark-${random}`,
-        read: ["*"],
-        write: ["*"],
-        rules: [
-            {
-                label: "Name",
-                key: "name",
-                type: "text",
-                default: "Empty Name",
-                required: true,
-                array: false,
-            },
-            {
-                label: "Year",
-                key: "year",
-                type: "numeric",
-                default: 1970,
-                required: true,
-                array: false,
-            },
-            {
-                label: "Active",
-                key: "active",
-                type: "boolean",
-                default: false,
-                required: true,
-                array: false,
-            },
-        ],
-    };
     const req = http.post(
         `${APPWRITE_ENDPOINT}/database/collections`,
-        JSON.stringify(payload),
+        JSON.stringify({
+            collectionId: `benchmark-${random}`,
+            name: `benchmark-${random}`,
+            permission: "document",
+            read: ["role:all"],
+            write: ["role:all"],
+        }),
         {
             headers: {
                 "X-Appwrite-Project": APPWRITE_PROJECT,
@@ -80,7 +55,67 @@ export const setup = () => {
             },
         }
     );
+
     const collection = req.json();
+
+    http.post(
+        `${APPWRITE_ENDPOINT}/database/collections/${collection["$id"]}/attributes/string`,
+        JSON.stringify(
+            {
+                collectionId: collection["$id"],
+                attributeId: "name",
+                size: 256,
+                required: true,
+            }
+        ),
+        {
+            headers: {
+                "X-Appwrite-Project": APPWRITE_PROJECT,
+                "X-Appwrite-Key": APPWRITE_KEY,
+                accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        }
+    );
+    
+    http.post(
+        `${APPWRITE_ENDPOINT}/database/collections/${collection["$id"]}/attributes/integer`,
+        JSON.stringify(
+            {
+                collectionId: collection["$id"],
+                attributeId: "year",
+                required: true,
+            }
+        ),
+        {
+            headers: {
+                "X-Appwrite-Project": APPWRITE_PROJECT,
+                "X-Appwrite-Key": APPWRITE_KEY,
+                accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        }
+    );
+
+    http.post(
+        `${APPWRITE_ENDPOINT}/database/collections/${collection["$id"]}/attributes/boolean`,
+        JSON.stringify(
+            {
+                collectionId: collectionId,
+                attributeId: "active",
+                required: true,
+            }
+        ),
+        {
+            headers: {
+                "X-Appwrite-Project": APPWRITE_PROJECT,
+                "X-Appwrite-Key": APPWRITE_KEY,
+                accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        }
+    );
+
     return {
         config,
         random,
@@ -92,6 +127,7 @@ export default ({ config, random, collection }) => {
     const jar = http.cookieJar();
     group("register and login", () => {
         const payload = {
+            userId: `user-${random}`,
             email: `user_${__VU}_${__ITER}_${random}@appwrite.io`,
             password: "AppwriteIsAwesome",
         };
@@ -132,13 +168,14 @@ export default ({ config, random, collection }) => {
                 `${APPWRITE_ENDPOINT}/database/collections/${collection["$id"]}/documents`,
                 JSON.stringify({
                     collectionId: collection["$id"],
+                    documentId: `document-${random}`,
                     data: {
                         name: `name-${id}`,
                         year: id,
                         active: id % 2 == 0,
                     },
-                    read: ["*"],
-                    write: ["*"],
+                    read: ["role:all"],
+                    write: ["role:all"],
                 }),
                 config
             );
