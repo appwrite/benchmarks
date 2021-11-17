@@ -1,0 +1,14 @@
+dist: xenial
+os: linux
+services:
+  - docker
+
+notifications:
+  email:
+    - team@appwrite.io
+
+before_script: 
+  - docker --version
+
+script:
+  - docker build -t appwrite/benchmarks .
