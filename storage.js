@@ -119,7 +119,7 @@ export default ({ config, random, bucket }) => {
 
             const created = http.post(
                 `${APPWRITE_ENDPOINT}/storage/buckets/${bucket["$id"]}/files`,
-                formData.body,
+                formData.body(),
                 config
             );
             console.log(created.body);
