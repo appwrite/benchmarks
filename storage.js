@@ -122,7 +122,7 @@ export default ({ config, random, bucket }) => {
                 formData,
                 config
             );
-            console.log(JSON.stringify(created.json()));
+            console.log(created.body);
             check(created, {
                 "file created": (r) => r.status === 201,
             });
