@@ -83,10 +83,10 @@ FormData.prototype.body = function() {
       cd += '\r\nContent-Type: '
         + (p.file.content_type || 'application/octet-stream')
         + '\r\n\r\n';
+        Array.prototype.push.apply(body, this.__toByteArray(cd));
+        var data = Array.isArray(p.file.data) ? p.file.data : this.__toByteArray(p.file.data);
+        Array.prototype.push.apply(body, data);
     }
-    Array.prototype.push.apply(body, this.__toByteArray(cd));
-    var data = Array.isArray(p.file.data) ? p.file.data : this.__toByteArray(p.file.data);
-    Array.prototype.push.apply(body, data);
     Array.prototype.push.apply(body, this.__toByteArray('\r\n'));
   }
   Array.prototype.push.apply(body, this.__toByteArray('--' + this.boundary + '--\r\n'));
