@@ -78,12 +78,12 @@ FormData.prototype.body = function() {
     var p = this.parts[i];
     console.log(JSON.stringify(p));
     var cd = 'Content-Disposition: form-data; name="' + p.field + '"';
-    // if (p.file.filename) {
-    //   cd += '; filename="' + p.file.filename.replace(/"/g,'%22') + '"';
-    // }
-    cd += '\r\nContent-Type: '
-      + (p.file.content_type || 'application/octet-stream')
-      + '\r\n\r\n';
+    if (p.file) {
+      cd += '; filename="' + p.file.filename.replace(/"/g,'%22') + '"';
+      cd += '\r\nContent-Type: '
+        + (p.file.content_type || 'application/octet-stream')
+        + '\r\n\r\n';
+    }
     Array.prototype.push.apply(body, this.__toByteArray(cd));
     var data = Array.isArray(p.file.data) ? p.file.data : this.__toByteArray(p.file.data);
     Array.prototype.push.apply(body, data);
