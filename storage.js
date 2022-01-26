@@ -109,7 +109,7 @@ export default ({ config, random, bucket }) => {
         };
         
 
-        for (var id = 1; id <= 50; id++) {
+        // for (var id = 1; id <= 50; id++) {
             let formData = new FormData();
             formData.append('file', http.file(binfile, 'file.png'), 'file.png');
             formData.append('bucketId', bucket["$id"]);
@@ -125,7 +125,7 @@ export default ({ config, random, bucket }) => {
             check(created, {
                 "file created": (r) => r.status === 201,
             });
-        }
+        // }
     });
     sleep(1);
 };
