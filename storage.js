@@ -1,6 +1,6 @@
 import { fail, group, check, sleep, randomSeed } from "k6";
 import http from "k6/http";
-import { FormData } from 'https://jslib.k6.io/formdata/0.0.2/index.js';
+import { FormData } from './formdata';
 
 const APPWRITE_ENDPOINT = __ENV.ENDPOINT || "";
 const APPWRITE_PROJECT = __ENV.PROJECT || "";
@@ -111,7 +111,7 @@ export default ({ config, random, bucket }) => {
         // for (var id = 1; id <= 50; id++) {
             let formData = new FormData();
             let httpfile = http.file(binfile);
-            console.log(binfile);
+            // console.log(binfile);
             // console.log(JSON.stringify(httpfile));
 
             formData.append('file', httpfile);
