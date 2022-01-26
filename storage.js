@@ -109,21 +109,27 @@ export default ({ config, random, bucket }) => {
         
 
         // for (var id = 1; id <= 50; id++) {
-            let formData = new FormData();
-            let httpfile = http.file(binfile);
-            // console.log(binfile);
-            // console.log(JSON.stringify(httpfile));
+            // let formData = new FormData();
+            // let httpfile = http.file(binfile);
+            // // console.log(binfile);
+            // // console.log(JSON.stringify(httpfile));
 
-            formData.append('file', httpfile);
-            formData.append('bucketId', bucket["$id"]);
-            formData.append('fileId', `file-${random}`);
-            formData.append('read', ['role:all']);
-            formData.append('write', ['role:all']);
-            config.headers['Content-Type'] =  'multipart/form-data; boundary=' + formData.boundary;
+            // formData.append('file', httpfile);
+            // formData.append('bucketId', bucket["$id"]);
+            // formData.append('fileId', `file-${random}`);
+            // formData.append('read', ['role:all']);
+            // formData.append('write', ['role:all']);
+            // config.headers['Content-Type'] =  'multipart/form-data; boundary=' + formData.boundary;
 
             const created = http.post(
                 `${APPWRITE_ENDPOINT}/storage/buckets/${bucket["$id"]}/files`,
-                formData.body(),
+                {
+                    file: http.file(binfile),
+                    bucketId: bucket["$id"],
+                    fileId: `file-${random}`,
+                    read: ['role:all'],
+                    write: ['role:all'], 
+                },
                 config
             );
             console.log(created.body);
