@@ -124,9 +124,8 @@ export default ({ config, random, bucket }) => {
             const created = http.post(
                 `${APPWRITE_ENDPOINT}/storage/buckets/${bucket["$id"]}/files`,
                 {
-                    file: http.file(binfile),
-                    bucketId: bucket["$id"],
                     fileId: `file-${random}`,
+                    file: http.file(binfile),
                     // read: ['role:all'],
                     // write: ['role:all'], 
                 },
