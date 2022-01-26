@@ -112,7 +112,7 @@ export default ({ config, random, bucket }) => {
             let formData = new FormData();
             let httpfile = http.file(binfile, 'file.png', 'image/png');
             console.log(binfile);
-            console.log(httpfile);
+            console.log(JSON.stringify(httpfile));
 
             formData.append('file', httpfile, 'file.png');
             formData.append('bucketId', bucket["$id"]);
