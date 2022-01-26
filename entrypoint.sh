@@ -1,4 +1,4 @@
-#!/bin/sh
+ -l!/bin/sh
 echo "Starting"
 
 timestamp=$(date +%s)

@@ -31,6 +31,7 @@ export let options = {
 
 export const setup = () => {
     randomSeed(CONFIG_SEED);
+    const binfile = open('./file.png', 'b');
     const random = Math.floor(Math.random() * 9999);
     const config = {
         headers: {
@@ -62,10 +63,11 @@ export const setup = () => {
         config,
         random,
         bucket,
+        binfile,
     };
 };
 
-export default ({ config, random, bucket }) => {
+export default ({ config, random, bucket, binfile }) => {
     const jar = http.cookieJar();
     group("register and login", () => {
         const payload = {
@@ -87,7 +89,7 @@ export default ({ config, random, bucket }) => {
         check(login, {
             "account logged in": (r) => r.status === 201,
         });
-
+        console.log()
         const cookie = login.cookies[`a_session_${APPWRITE_PROJECT}`][0].value;
         jar.set(APPWRITE_ENDPOINT, `a_session_${APPWRITE_PROJECT}`, cookie);
 
@@ -105,11 +107,11 @@ export default ({ config, random, bucket }) => {
                 "Content-Type": "multipart/form-data",
             },
         };
-        const binfile = open('./file.png', 'b');
+        
 
         for (var id = 1; id <= 50; id++) {
             let formData = new FormData();
-            formData.append('file', binfile, 'file.png');
+            formData.append('file', http.file(binfile, file.png), 'file.png');
             formData.append('bucketId', bucket["$id"]);
             formData.append('fileId', `file-${random}`);
             formData.append('read', ['role:all']);
