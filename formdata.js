@@ -76,7 +76,7 @@ FormData.prototype.body = function() {
   for (var i=0; i < this.parts.length; i++) {
     Array.prototype.push.apply(body, barr);
     var p = this.parts[i];
-    console.log(p);
+    console.log(JSON.stringify(p));
     var cd = 'Content-Disposition: form-data; name="' + p.field + '"';
     // if (p.file.filename) {
     //   cd += '; filename="' + p.file.filename.replace(/"/g,'%22') + '"';

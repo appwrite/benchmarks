@@ -30,7 +30,7 @@ export let options = {
     },
 };
 
-const binfile = open('./file.png', 'b');
+const binfile = open('./hello.txt', 'b');
 export const setup = () => {
     randomSeed(CONFIG_SEED);
     const random = Math.floor(Math.random() * 9999);
