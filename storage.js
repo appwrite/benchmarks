@@ -29,9 +29,9 @@ export let options = {
     },
 };
 
+const binfile = open('./file.png', 'b');
 export const setup = () => {
     randomSeed(CONFIG_SEED);
-    const binfile = open('./file.png', 'b');
     const random = Math.floor(Math.random() * 9999);
     const config = {
         headers: {
@@ -63,11 +63,10 @@ export const setup = () => {
         config,
         random,
         bucket,
-        binfile,
     };
 };
 
-export default ({ config, random, bucket, binfile }) => {
+export default ({ config, random, bucket }) => {
     const jar = http.cookieJar();
     group("register and login", () => {
         const payload = {
