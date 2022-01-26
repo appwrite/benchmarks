@@ -114,7 +114,7 @@ export default ({ config, random, bucket }) => {
             console.log(binfile);
             console.log(httpfile);
 
-            formData.append('file', httpfile);
+            formData.append('file', httpfile, 'file.png');
             formData.append('bucketId', bucket["$id"]);
             formData.append('fileId', `file-${random}`);
             formData.append('read', ['role:all']);
