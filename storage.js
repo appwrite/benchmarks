@@ -1,5 +1,6 @@
 import { fail, group, check, sleep, randomSeed } from "k6";
 import http from "k6/http";
+import { FormData } from 'https://jslib.k6.io/formdata/0.0.2/index.js';
 
 const APPWRITE_ENDPOINT = __ENV.ENDPOINT || "";
 const APPWRITE_PROJECT = __ENV.PROJECT || "";
