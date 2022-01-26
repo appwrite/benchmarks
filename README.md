@@ -17,3 +17,8 @@ docker run -it --env-file .env -v `pwd`/results:/results -e task=http benchmarks
 ```sh
 docker run -it --env-file .env -v `pwd`/results:/results -e task=database benchmarks
 ```
+
+### Storage
+```sh
+docker run -it --env-file .env -v `pwd`/results:/results -e task=storage benchmarks
+```

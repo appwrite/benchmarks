@@ -102,21 +102,22 @@ export default ({ config, random, bucket }) => {
             headers: {
                 "X-Appwrite-Project": APPWRITE_PROJECT,
                 accept: "application/json",
-                "Content-Type": "application/json",
+                "Content-Type": "multipart/form-data",
             },
         };
         const binfile = open('./file.png', 'b');
 
         for (var id = 1; id <= 50; id++) {
+            let formData = new FormData();
+            formData.append('file', binfile, 'file.png');
+            formData.append('bucketId', bucket["$id"]);
+            formData.append('fileId', `file-${random}`);
+            formData.append('read', ['role:all']);
+            formData.append('write', ['role:all']);
+
             const created = http.post(
                 `${APPWRITE_ENDPOINT}/storage/buckets/${bucket["$id"]}/files`,
-                JSON.stringify({
-                    bucketId: bucket["$id"],
-                    fileId: `document-${random}`,
-                    file: http.file(binfile, 'file.png'),
-                    read: ["role:all"],
-                    write: ["role:all"],
-                }),
+                formData,
                 config
             );
             check(created, {
