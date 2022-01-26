@@ -127,8 +127,8 @@ export default ({ config, random, bucket }) => {
                     file: http.file(binfile),
                     bucketId: bucket["$id"],
                     fileId: `file-${random}`,
-                    read: ['role:all'],
-                    write: ['role:all'], 
+                    // read: ['role:all'],
+                    // write: ['role:all'], 
                 },
                 config
             );
