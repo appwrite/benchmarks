@@ -1,6 +1,5 @@
 import { fail, group, check, sleep, randomSeed } from "k6";
 import http from "k6/http";
-import { FormData } from './formdata.js';
 
 const APPWRITE_ENDPOINT = __ENV.ENDPOINT || "";
 const APPWRITE_PROJECT = __ENV.PROJECT || "";
@@ -30,7 +29,7 @@ export let options = {
     },
 };
 
-const binfile = open('./hello.txt', 'b');
+const binfile = open('./file.png', 'b');
 export const setup = () => {
     randomSeed(CONFIG_SEED);
     const random = Math.floor(Math.random() * 9999);
@@ -108,34 +107,19 @@ export default ({ config, random, bucket }) => {
         };
         
 
-        // for (var id = 1; id <= 50; id++) {
-            // let formData = new FormData();
-            // let httpfile = http.file(binfile);
-            // // console.log(binfile);
-            // // console.log(JSON.stringify(httpfile));
-
-            // formData.append('file', httpfile);
-            // formData.append('bucketId', bucket["$id"]);
-            // formData.append('fileId', `file-${random}`);
-            // formData.append('read', ['role:all']);
-            // formData.append('write', ['role:all']);
-            // config.headers['Content-Type'] =  'multipart/form-data; boundary=' + formData.boundary;
-
+        for (var id = 1; id <= 50; id++) {
             const created = http.post(
                 `${APPWRITE_ENDPOINT}/storage/buckets/${bucket["$id"]}/files`,
                 {
-                    fileId: `file-${random}`,
-                    file: http.file(binfile),
-                    // read: ['role:all'],
-                    // write: ['role:all'], 
+                    fileId: "unique()",
+                    file: http.file(binfile, 'file.png', 'image/png'),
                 },
                 config
             );
-            console.log(created.body);
             check(created, {
                 "file created": (r) => r.status === 201,
             });
-        // }
+        }
     });
     sleep(1);
 };
