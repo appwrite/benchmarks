@@ -70,7 +70,7 @@ export default ({ config, random, bucket }) => {
     const jar = http.cookieJar();
     group("register and login", () => {
         const payload = {
-            userId: `user-${random}`,
+            userId: 'unique()',
             email: `user_${__VU}_${__ITER}_${random}@appwrite.io`,
             password: "AppwriteIsAwesome",
         };
