@@ -110,7 +110,7 @@ export default ({ config, random, bucket }) => {
 
         // for (var id = 1; id <= 50; id++) {
             let formData = new FormData();
-            formData.append('file', http.file(binfile, 'file.png'));
+            formData.append('file', http.file(binfile, 'file.png', 'image/png'));
             formData.append('bucketId', bucket["$id"]);
             formData.append('fileId', `file-${random}`);
             formData.append('read', ['role:all']);
