@@ -124,6 +124,8 @@ export default ({ config, random, bucket }) => {
         
         let fileId = undefined;
         for (var id = 0; id < chunks; id++) {
+            console.log("chunk", id);
+            console.log("fileId", fileId);
             const start = id * chunkSize;
             const end = Math.min(id * chunkSize + chunkSize - 1, size)
             config.headers["Content-Range"] = `bytes ${start}-${end}/${size}`;
