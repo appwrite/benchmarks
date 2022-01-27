@@ -34,12 +34,12 @@ const chunks = __ENV.CHUNKS || 10;
 const chunkSize = __ENV.CHUNK_SIZE || 5 * 1024 * 1024;
 const size = __ENV.SIZE || 1 * 1024 * 1024 * 1024;
 
-console.log({
+console.log(JSON.stringify({
     chunks,
     chunkSize,
     size,
 
-});
+}));
 
 for(let i = 0; i < chunks; i++) {
     binfiles.push(`./chunked_benchmark/chunks/c${i}.chunk`);
