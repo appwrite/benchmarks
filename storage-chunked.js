@@ -42,7 +42,7 @@ console.log(JSON.stringify({
 }));
 
 for(let i = 0; i < chunks; i++) {
-    binfiles.push(`./chunked_benchmark/chunks/c${i}.chunk`);
+    binfiles.push(open(`./chunked_benchmark/chunks/c${i}.chunk`, 'b'));
 }
 
 const binfile = open('./file.png', 'b');
