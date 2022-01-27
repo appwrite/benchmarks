@@ -35,7 +35,7 @@ const chunkSize = __ENV.CHUNK_SIZE || 5 * 1024 * 1024;
 const size = __ENV.SIZE || 1 * 1024 * 1024 * 1024;
 
 for(let i = 0; i < chunks; i++) {
-    binfiles.push(`./chunks/c${i}.bin`);
+    binfiles.push(`./chunked_benchmark/chunks/c${i}.chunk`);
 }
 
 const binfile = open('./file.png', 'b');
