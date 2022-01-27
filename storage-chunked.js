@@ -45,7 +45,6 @@ for(let i = 0; i < chunks; i++) {
     binfiles.push(open(`./chunked_benchmark/chunks/c${i}.chunk`, 'b'));
 }
 
-const binfile = open('./file.png', 'b');
 export const setup = () => {
     randomSeed(CONFIG_SEED);
     const random = Math.floor(Math.random() * 9999);
@@ -124,8 +123,6 @@ export default ({ config, random, bucket }) => {
         
         let fileId = undefined;
         for (var id = 0; id < chunks; id++) {
-            console.log("chunk", id);
-            console.log("fileId", fileId);
             const start = id * chunkSize;
             const end = Math.min(id * chunkSize + chunkSize - 1, size)
             config.headers["Content-Range"] = `bytes ${start}-${end}/${size}`;
