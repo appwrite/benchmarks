@@ -37,14 +37,27 @@ export const setup = () => {
             "X-Appwrite-Project": APPWRITE_PROJECT,
         },
     };
+    const db = http.post(`${APPWRITE_ENDPOINT}/databases`, JSON.stringify({
+        databaseId: 'unique()',
+        name: `benchmark-${Math.floor(Math.random() * 9999)}`,
+        permissions: ['read("any")'],
+    }), {
+        headers: {
+            "X-Appwrite-Project": APPWRITE_PROJECT,
+            "X-Appwrite-Key": APPWRITE_KEY,
+            accept: "application/json",
+            "Content-Type": "application/json",
+        },
+    });
+
+    const database = db.json();
+
     const req = http.post(
-        `${APPWRITE_ENDPOINT}/database/collections`,
+        `${APPWRITE_ENDPOINT}/databases/${database["$id"]}/collections`,
         JSON.stringify({
-            collectionId: `benchmark-${random}`,
-            name: `benchmark-${random}`,
-            permission: "document",
-            read: ["role:all"],
-            write: ["role:all"],
+            collectionId: 'unique()',
+            name: `benchmark-${Math.floor(Math.random() * 9999)}`,
+            permissions: ['read("any")'],
         }),
         {
             headers: {
@@ -59,31 +72,11 @@ export const setup = () => {
     const collection = req.json();
 
     http.post(
-        `${APPWRITE_ENDPOINT}/database/collections/${collection["$id"]}/attributes/string`,
+        `${APPWRITE_ENDPOINT}/databases/${database["$id"]}/collections/${collection["$id"]}/attributes/string`,
         JSON.stringify(
             {
-                collectionId: collection["$id"],
-                attributeId: "name",
+                key: "name",
                 size: 256,
-                required: true,
-            }
-        ),
-        {
-            headers: {
-                "X-Appwrite-Project": APPWRITE_PROJECT,
-                "X-Appwrite-Key": APPWRITE_KEY,
-                accept: "application/json",
-                "Content-Type": "application/json",
-            },
-        }
-    );
-    
-    http.post(
-        `${APPWRITE_ENDPOINT}/database/collections/${collection["$id"]}/attributes/integer`,
-        JSON.stringify(
-            {
-                collectionId: collection["$id"],
-                attributeId: "year",
                 required: true,
             }
         ),
@@ -98,11 +91,28 @@ export const setup = () => {
     );
 
     http.post(
-        `${APPWRITE_ENDPOINT}/database/collections/${collection["$id"]}/attributes/boolean`,
+        `${APPWRITE_ENDPOINT}/databases/${database["$id"]}/collections/${collection["$id"]}/attributes/integer`,
         JSON.stringify(
             {
-                collectionId: collectionId,
-                attributeId: "active",
+                key: "year",
+                required: true,
+            }
+        ),
+        {
+            headers: {
+                "X-Appwrite-Project": APPWRITE_PROJECT,
+                "X-Appwrite-Key": APPWRITE_KEY,
+                accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        }
+    );
+
+    http.post(
+        `${APPWRITE_ENDPOINT}/databases/${database["$id"]}/collections/${collection["$id"]}/attributes/boolean`,
+        JSON.stringify(
+            {
+                key: "active",
                 required: true,
             }
         ),
@@ -120,55 +130,57 @@ export const setup = () => {
         config,
         random,
         collection,
+        database,
     };
 };
 
-export default ({ config, random, collection }) => {
-    const jar = http.cookieJar();
-    group("register and login", () => {
-        const payload = {
-            userId: `user-${random}`,
-            email: `user_${__VU}_${__ITER}_${random}@appwrite.io`,
-            password: "AppwriteIsAwesome",
-        };
+export default ({ config, random, database, collection }) => {
+    // const jar = http.cookieJar();
+    // group("register and login", () => {
+    //     const payload = {
+    //         userId: `user-${random}`,
+    //         email: `user_${__VU}_${__ITER}_${random}@appwrite.io`,
+    //         password: "AppwriteIsAwesome",
+    //     };
 
-        const created = http.post(`${APPWRITE_ENDPOINT}/account`, payload, config);
-        check(created, {
-            "account created": (r) => r.status === 201,
-        });
+    //     const created = http.post(`${APPWRITE_ENDPOINT}/account`, payload, config);
+    //     check(created, {
+    //         "account created": (r) => r.status === 201,
+    //     });
 
-        const login = http.post(
-            `${APPWRITE_ENDPOINT}/account/sessions`,
-            payload,
-            config
-        );
-        check(login, {
-            "account logged in": (r) => r.status === 201,
-        });
+    //     const login = http.post(
+    //         `${APPWRITE_ENDPOINT}/account/sessions/email`,
+    //         payload,
+    //         config
+    //     );
+    //     check(login, {
+    //         "account logged in": (r) => r.status === 201,
+    //     });
 
-        const cookie = login.cookies[`a_session_${APPWRITE_PROJECT}`][0].value;
-        jar.set(APPWRITE_ENDPOINT, `a_session_${APPWRITE_PROJECT}`, cookie);
+    //     const cookie = login.cookies[`a_session_${APPWRITE_PROJECT}`][0].value;
+    //     jar.set(APPWRITE_ENDPOINT, `a_session_${APPWRITE_PROJECT}`, cookie);
 
-        const user = http.get(`${APPWRITE_ENDPOINT}/account`, config);
-        check(user, {
-            "account get": (r) => r.status === 200,
-        });
-    });
+    //     const user = http.get(`${APPWRITE_ENDPOINT}/account`, config);
+    //     check(user, {
+    //         "account get": (r) => r.status === 200,
+    //     });
+    // });
 
     group("database", () => {
         const config = {
             headers: {
                 "X-Appwrite-Project": APPWRITE_PROJECT,
+                "x-appwrite-key": APPWRITE_KEY,
                 accept: "application/json",
                 "Content-Type": "application/json",
             },
         };
         for (var id = 1; id <= 50; id++) {
             const created = http.post(
-                `${APPWRITE_ENDPOINT}/database/collections/${collection["$id"]}/documents`,
+                `${APPWRITE_ENDPOINT}/databases/${database["$id"]}/collections/${collection["$id"]}/documents`,
                 JSON.stringify({
                     collectionId: collection["$id"],
-                    documentId: `document-${random}`,
+                    documentId: 'unique()',
                     data: {
                         name: `name-${id}`,
                         year: id,
@@ -183,7 +195,7 @@ export default ({ config, random, collection }) => {
                 "document created": (r) => r.status === 201,
             });
         }
-        const url = `${APPWRITE_ENDPOINT}/database/collections/${collection["$id"]}/documents?project=${APPWRITE_PROJECT}`;
+        const url = `${APPWRITE_ENDPOINT}/databases/${database["$id"]}/collections/${collection["$id"]}/documents?project=${APPWRITE_PROJECT}`;
         const responses = http.batch([
             ["GET", url],
             ["GET", url + "&filters%5B%5D=active%3D1"],
@@ -191,15 +203,15 @@ export default ({ config, random, collection }) => {
         ]);
         check(responses[0], {
             "list documents status was 200": (res) => res.status === 200,
-            "got documents": (res) => res.json().sum > 0,
+            "got documents": (res) => res.json().total > 0,
         });
         check(responses[1], {
             "list documents status was 200": (res) => res.status === 200,
-            "got documents": (res) => res.json().sum > 0,
+            "got documents": (res) => res.json().total > 0,
         });
         check(responses[2], {
             "list documents status was 200": (res) => res.status === 200,
-            "got documents": (res) => res.json().sum > 0,
+            "got documents": (res) => res.json().total > 0,
         });
     });
     sleep(1);
