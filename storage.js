@@ -42,8 +42,8 @@ export const setup = () => {
     const req = http.post(
         `${APPWRITE_ENDPOINT}/storage/buckets`,
         JSON.stringify({
-            bucketId: `benchmark-${random}`,
-            name: `benchmark-${random}`,
+            bucketId: `unique()`,
+            name: `benchmark-${Math.floor(Math.random() * 9999)}`,
             permission: "file",
             read: ["role:all"],
             write: ["role:all"],
@@ -103,6 +103,7 @@ export default ({ config, random, bucket }) => {
         const config = {
             headers: {
                 "X-Appwrite-Project": APPWRITE_PROJECT,
+                "x-appwrite-key": APPWRITE_KEY,
                 accept: "application/json",
             },
         };
